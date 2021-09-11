@@ -1,0 +1,184 @@
+---
+title: "The Class of Fall 2021"
+subtitle: "STAE04: Data Visualization"
+author: "Johan Larsson"
+affiliation: "Department of Statistics, Lund University"
+date: "`r Sys.Date()`"
+toc: false
+papersize: a4
+geometry: margin=4cm
+colorlinks: true
+output:
+  pdf_document:
+    number_sections: true
+---
+
+```{r setup, include = FALSE}
+# This is the setup chunk. It can be used to setup general options and load
+# packages that you make use of during the report.
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 2.5,
+  fig.height = 2.2
+)
+
+library(tidyverse)
+
+# set ggplot2 theme options
+theme_set(theme_grey(base_size = 10))
+
+options(
+  digits = 3, # limit number of significant digits
+  width = 63  # limit width of code
+)
+```
+
+# Introduction
+
+```{r, echo = FALSE}
+library(tidyverse)
+
+tmp <- read_csv("stae21fall.csv")
+
+dat <-
+  read_csv("stae21fall.csv") %>%
+  select(c(6, 8, 10, 12, 14)) %>%
+  rename_with(~ c(
+    "Occupation",
+    "Workload",
+    "Dataviz_Experience",
+    "R_Experience",
+    "Learnt_About_Course"
+  )) %>%
+  mutate(
+    Dataviz_Experience =
+      fct_relabel(
+        Dataviz_Experience,
+        ~ str_extract(., "^[[:alnum:]]+")
+      ),
+    R_Experience =
+      fct_relabel(
+        R_Experience,
+        ~ str_extract(., "^[[:alnum:]]+")
+      ),
+    Dataviz_Experience = factor(
+      Dataviz_Experience,
+      c("novice", "beginner", "intermediate"),
+      ordered = TRUE
+    ),
+    R_Experience = factor(
+      R_Experience,
+      c("novice", "beginner", "intermediate"),
+      ordered = TRUE
+    ),
+    Learnt_About_Course = factor(
+      Learnt_About_Course,
+      labels = c(
+        "antagning.se",
+        "relative, friend, or colleague",
+        "Social Media",
+        "Dept.Website"
+      )
+    )
+  )
+```
+
+Let's take a look at the survey results. `r nrow(dat)` of you have completed
+the survey to date. I have pulled your data from Canvas and formatted it to make
+it compatible with ggplot2. 
+
+# Occupation
+
+Let's start by looking at what you do. In \autoref{fig:occupation}, we see 
+that there is a fairly even split between full-time students and employees in
+the group. Some of you responded "other", which presumably indicates that you
+are either working part-time or studying part-time.
+
+```{r occupation, fig.cap = "The occupation of the students in the class.", fig.width = 5}
+ggplot(dat, aes(Occupation)) +
+  geom_bar() +
+  labs(y = "Count") +
+  scale_x_discrete(
+    labels = function(x) sub(",", ",\n", x, fixed = TRUE))
+```
+
+# Planned Hours of Work
+
+By looking at \autoref{fig:workload}, it appears that there is quite a lot of
+variability in how much time you plan to spend on the course each week. The mode
+of the distribution (most common value), however, is ten, which is spot on in
+terms of what the intended workload of the course is. It is perhaps, however, a
+little worrying that many of you plan to spend only five hours each week on the
+course, since this means you'll have to be twice as efficient as my estimate!
+
+```{r workload, fig.cap = "The number of hours of work you plan to work on the course each week.", fig.width = 5, fig.height = 2}
+ggplot(dat, aes(Workload, fill = Occupation)) +
+  geom_dotplot(
+    binwidth = 1,
+    binpositions = "all",
+    stackgroups = TRUE
+  ) +
+  theme(
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    legend.position = "right"
+  ) +
+  xlab("hours") +
+  scale_fill_brewer(type = "qual")
+```
+
+# Experience with Data Visualization and R
+
+As expected, the level of experience with R and with Data Visualization appears
+to be correlated (\autoref{fig:experience}). It is perhaps also noteworthy that
+none of you consider yourselves to be experts in either data visualization or R,
+which to me says that you're likely a good match for the course. The large
+majority of the group also place themselves in the category *beginner* in terms
+of experience with data visualization. 
+
+```{r experience, fig.width = 4.5, fig.height = 3.5, fig.cap = "Experience with R and data visualization. Notice that the overlapping labels are not quite ideal here. (I did not have time to fix it properly, sorry!)"}
+library(ggmosaic)
+
+dat %>%
+  drop_na(R_Experience, Dataviz_Experience) %>%
+  ggplot() +
+  geom_mosaic(aes(
+    product(R_Experience, Dataviz_Experience),
+    fill = R_Experience
+  )) +
+  theme(legend.position = "none") +
+  labs(y = "R Experience", x = "Dataviz Experience")
+```
+
+# Expectations
+
+Many of you of course have expectations related to visualizations, both in terms
+of practically constructing visualizations and also how to do so effectively,
+for instance by telling stories using visualizations. These are both among the
+primary goals of this course, so I hope you'll find that we satisfy these
+expectations adequately.
+
+Some of you also mentioned specific skills or types of visualizations, such as
+animated visualizations and maps, which are both part of the course. In
+particular, we will focus quite a bit on maps in the course. Please note that
+even if we only cover the basics on some of these topics, you will find that the
+skills you learn are easy to extend to new types of visualizations.
+
+Some of you also wrote specifically about learning to program in R. To be fair,
+this is not a course that's dedicated to programming in R. We are using R (and
+ggplot2) because they are fantastic tools for visualizing data, but will only
+cover the bare necessities for doing visualization work in R. Many aspects that
+would be part of an introductory course to R, such as loop constructs, will not
+be covered at all, so please do not expect to come out expert programmers after
+you've finished here!
+
+Another thing that came up when I read your expectations is building statistical
+models. We will only talk about statistical modeling in this course at a very
+basic level and only consider topics that you are expected to have learned in
+your introductory courses to statistics. We will cover visualizing estimates and
+predictions from linear regression, but that's about it.
+
+Good luck on the rest of the course!

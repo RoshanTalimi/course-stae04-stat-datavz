@@ -1,0 +1,128 @@
+---
+title: "Assignment1"
+subtitle: "STAE04/DABN19: Data Visualization"
+author: "Roshan Talimi"
+date: "`r Sys.Date()`"
+papersize: a4
+geometry: margin=4cm
+colorlinks: true
+output:
+  pdf_document:
+    number_sections: true
+---
+
+```{r include = FALSE}
+download.file(
+  "https://raw.githubusercontent.com/stat-lu/dataviz/main/template.Rmd",
+  "template.Rmd", # filename for the file (which you can replace if you want)
+  mode = "wb"
+)
+```
+
+
+```{r setup, include = FALSE}
+# Setup options for R Markdown
+knitr::opts_chunk$set(
+  echo       = FALSE,    # Do not print code
+  warning    = FALSE,    # Suppress warnings
+  message    = FALSE,    # Suppress messages
+  fig.align  = "center", # Center figures
+  fig.width  = 2.7,      # Good standard figure width for single-panel figures
+  fig.height = 2.4       # Good standard figure height for single-panel figures
+)
+
+library(tidyverse)
+
+# Set a theme for ggplot2
+theme_set(theme_light(base_size = 15))
+
+# Set options
+options(
+  digits = 3, # limit the number of significant digits
+  width  = 63 # limit the width of code output
+)
+```
+
+```{r echo=FALSE, eval=FALSE}
+head(starwars)
+```
+Task 1
+
+```{r echo=TRUE}
+starwars_tatooine_summary <-
+  starwars %>% 
+  filter(homeworld == "Tatooine") %>% 
+  drop_na(any_of("mass")) %>% 
+  group_by(eye_color) %>% 
+  summarize(avg_mass = mean(mass))
+```
+
+
+```{r, fig.cap = "Average weight of Tatooine born Star Wars charachters by eye color."}
+ggplot(starwars_tatooine_summary, aes(eye_color, avg_mass)) +
+  geom_col() +
+  xlab("Eye Color") +
+  ylab("Average Weight")
+```
+
+
+Task 2
+
+Cases of tuberculosis in three countries across two years.
+
+```{r echo=FALSE}
+knitr::kable(table4a)
+```
+
+The above dataset is not tidy because:
+
+1. It does not have a row for every observation(e.g. Afghanistan 1999 745)
+2. It does not have a column for every variable (e.g. Year or Cases)
+
+Our 3 variables in this data are Country, Year and Tuberculosis Cases.
+
+```{r echo=TRUE}
+table4a_tidy <-
+  table4a %>%
+  pivot_longer(
+    c("1999", "2000"), 
+    names_to = "year", 
+    values_to = "cases"
+  )
+```
+
+The tidy version of the data looks like this:
+
+```{r echo=FALSE}
+knitr::kable(table4a_tidy)
+```
+Task 3
+
+Population for the countries during that period is:
+
+```{r}
+table4b_tidy <-
+  table4b %>%
+  pivot_longer(
+    c("1999", "2000"), 
+    names_to = "year", 
+    values_to = "population"
+  )
+```
+
+```{r echo=FALSE}
+knitr::kable(table4b_tidy)
+```
+
+We can now calculate the rate of tuberculosis cases for population by country and year
+
+```{r echo=FALSE}
+table4 <- left_join(table4b_tidy, table4a_tidy)
+table4 %>% mutate(rate = cases/population)
+```
+
+
+
+
+
+
