@@ -7,3 +7,7 @@ https://www.stat.lu.se/en/education/courses/stae04_data_visualisation
 
 ### Assignment 2
 
+
+
+### Assignment 3
+
