@@ -1,1 +1,1 @@
-# stae04-stat-datavz
+# STAE04 Data Visualisation - Lund University
