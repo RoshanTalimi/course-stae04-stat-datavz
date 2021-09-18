@@ -15,7 +15,6 @@ output:
 #https://raw.githubusercontent.com/stat-lu/dataviz/main/template.Rmd"
 ```
 
-
 ```{r setup, include = FALSE}
 # Setup options for R Markdown
 knitr::opts_chunk$set(
@@ -39,13 +38,39 @@ options(
 )
 ```
 
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r}
+abalone_raw <- read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.data", col_names = FALSE)
 ```
 
-```{r echo, include=F}
-library(tidyverse)
-```
 
 Task 1
+
+* Where and when was this data collected
+* How many observations and variables are there
+* What are the variables? Describe each in terms of its units of measurement and it’s data type (continuous, integer, or categorical/nominal).
+
+
+```{r echo=TRUE}
+
+```
+
+
+
+Task 2
+
+```{r}
+abalone <-
+  abalone_raw %>%
+  rename(NA) %>% # rename
+  mutate(NA)     # format
+```
+
+
+
+
+
+```{r, fig.cap = "Average weight of Tatooine born Star Wars charachters by eye color."}
+
+```
+
+

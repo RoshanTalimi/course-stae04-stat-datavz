@@ -15,7 +15,6 @@ output:
 #https://raw.githubusercontent.com/stat-lu/dataviz/main/template.Rmd"
 ```
 
-
 ```{r setup, include = FALSE}
 # Setup options for R Markdown
 knitr::opts_chunk$set(
@@ -42,6 +41,7 @@ options(
 ```{r echo=FALSE, eval=FALSE}
 head(starwars)
 ```
+
 Task 1
 
 ```{r echo=TRUE}
