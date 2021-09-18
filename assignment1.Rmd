@@ -12,11 +12,7 @@ output:
 ---
 
 ```{r include = FALSE}
-download.file(
-  "https://raw.githubusercontent.com/stat-lu/dataviz/main/template.Rmd",
-  "template.Rmd", # filename for the file (which you can replace if you want)
-  mode = "wb"
-)
+#https://raw.githubusercontent.com/stat-lu/dataviz/main/template.Rmd"
 ```
 
 
