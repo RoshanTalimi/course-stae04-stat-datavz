@@ -43,3 +43,8 @@ data/
 
 # Tidyverse cheatsheet folder
 cheatsheets/
+
+# info files
+*.data
+*.names
+Index
