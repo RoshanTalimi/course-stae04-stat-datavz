@@ -40,6 +40,7 @@ options(
 
 ```{r echo=FALSE}
 # https://archive.ics.uci.edu/ml/datasets/Abalone
+
 url <- paste0(
   "https://archive.ics.uci.edu/",
   "ml/machine-learning-databases/abalone/abalone.data"
@@ -91,12 +92,17 @@ abalone <-
   mutate(NA)     # format
 ```
 
+Pivot your data into a long format and store this data set in abalone_long using pivot_longer().
 
-
+```{r}
+abalone_long <-
+  abalone %>%
+  pivot_longer(NA) # pivot your data
+```
 
 
 ```{r, fig.cap = "Average weight of Tatooine born Star Wars charachters by eye color."}
-
+# Plot these variables using both box and violin plots.
 ```
 
 
