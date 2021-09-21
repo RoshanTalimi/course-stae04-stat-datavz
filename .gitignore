@@ -48,3 +48,6 @@ cheatsheets/
 *.data
 *.names
 Index
+
+# PDFs
+*.pdf

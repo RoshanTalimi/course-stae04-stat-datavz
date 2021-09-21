@@ -18,7 +18,7 @@ output:
 ```{r setup, include = FALSE}
 # Setup options for R Markdown
 knitr::opts_chunk$set(
-  echo       = FALSE,    # Do not print code
+  echo       = TRUE,    # Do not print code
   warning    = FALSE,    # Suppress warnings
   message    = FALSE,    # Suppress messages
   fig.align  = "center", # Center figures
@@ -38,7 +38,7 @@ options(
 )
 ```
 
-```{r include = FALSE}
+```{r include = FALSE, echo=FALSE}
 # https://archive.ics.uci.edu/ml/datasets/Abalone
 
 url <- paste0(
@@ -48,36 +48,33 @@ url <- paste0(
 abalone_raw <- read_csv(url, col_names = FALSE)
 ```
 
+Abalone data set:
+
+```{r include = FALSE}
+abalone_raw %>% sample_n(10) %>% knitr::kable("simple")
+```
 
 Task 1
 
-* Where and when was this data collected: Tasmania December 1995  
-* How many observations and variables are there - 4177 observations, 9 variables  
-* What are the variables? Describe each in terms of its units of measurement and it’s data type (continuous, integer, or categorical/nominal).
+* This data was collected in Tasmania, December of 1995.
+* There are 4177 observations and 9 variables in this data set.
+* The variables are:
 
-	Name		Data Type	Meas.	Description
-	----		---------	-----	-----------
-	Sex		  nominal			M, F, and I (infant)
-	Length	continuous	mm	Longest shell measurement
-	Diametercontinuous	mm	perpendicular to length
-	Height	continuous	mm	with meat in shell
-	Whole   weight	continuous	grams	whole abalone
-	Shucked weight	continuous	grams	weight of meat
-	Viscera weight	continuous	grams	gut weight (after bleeding)
-	Shell   weight	continuous	grams	after being dried
-	Rings		integer			+1.5 gives the age in years
-
-
-```{r einclude = FALSE}
-colnames(abalone_raw)
-```
+1. Sex (nominal)
+2. Length (continuous)
+3. Diameter (continuous)
+4. Height	(continuous)
+5. Whole_weight (continuous)
+6. Shucked_weight	(continuous)
+7. Viscera_weight (continuous)
+8. Shell_weight (continuous)
+9. Rings (integer)
 
 
 Task 2
 
-```{r include = FALSE}
-abalone_raw
-
+```{r}
+abalone <-
 abalone_raw %>% 
   rename(sex = X1,
          length = X2,
@@ -89,27 +86,15 @@ abalone_raw %>%
 	shell_weight = X8,
 	rings = X9) %>% 
   mutate(sex = fct_recode(sex),
-         rings = as.numeric(factor(rings)))
-                       
-                  
-
-# abalone <-
-#   abalone_raw %>%
-#   rename() %>% # rename
-#   mutate(NA)     # format
+         rings = as.integer(factor(rings)))
 ```
-
-Pivot your data into a long format and store this data set in abalone_long using pivot_longer().
 
 ```{r}
-# abalone_long <-
-#   abalone %>%
-#   pivot_longer(NA) # pivot your data
+abalone %>% sample_n(5) %>% knitr::kable("simple")
 ```
 
+I really don't know how to make this longer :(
 
-```{r, fig.cap = "Average weight of Tatooine born Star Wars charachters by eye color."}
-# Plot these variables using both box and violin plots.
-```
+
 
 
