@@ -51,8 +51,8 @@ abalone_raw <- read_csv(url, col_names = FALSE)
 
 Task 1
 
-* Where and when was this data collected: Tasmania December 1995
-* How many observations and variables are there - 4177 observations, 8 variables
+* Where and when was this data collected: Tasmania December 1995  
+* How many observations and variables are there - 4177 observations, 8 variables  
 * What are the variables? Describe each in terms of its units of measurement and it’s data type (continuous, integer, or categorical/nominal).
 
 	Name		Data Type	Meas.	Description
@@ -67,29 +67,22 @@ Task 1
 	Shell weight	continuous	grams	after being dried
 	Rings		integer			+1.5 gives the age in years
 
-   Statistics for numeric domains:
-
-		Length	Diam	Height	Whole	Shucked	Viscera	Shell	Rings
-	Min	0.075	0.055	0.000	0.002	0.001	0.001	0.002	    1
-	Max	0.815	0.650	1.130	2.826	1.488	0.760	1.005	   29
-	Mean	0.524	0.408	0.140	0.829	0.359	0.181	0.239	9.934
-	SD	0.120	0.099	0.042	0.490	0.222	0.110	0.139	3.224
-	Correl	0.557	0.575	0.557	0.540	0.421	0.504	0.628	  1.0
-
 
 ```{r echo=TRUE}
 colnames(abalone_raw)
 ```
 
-
-
 Task 2
 
 ```{r}
-abalone <-
-  abalone_raw %>%
-  rename(NA) %>% # rename
-  mutate(NA)     # format
+abalone_raw
+
+abalone_raw %>% mutate(sex = sex)
+
+# abalone <-
+#   abalone_raw %>%
+#   rename() %>% # rename
+#   mutate(NA)     # format
 ```
 
 Pivot your data into a long format and store this data set in abalone_long using pivot_longer().
