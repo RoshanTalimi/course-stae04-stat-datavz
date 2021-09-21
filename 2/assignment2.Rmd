@@ -12,7 +12,7 @@ output:
 ---
 
 ```{r include = FALSE}
-#https://raw.githubusercontent.com/stat-lu/dataviz/main/template.Rmd"
+# https://raw.githubusercontent.com/stat-lu/dataviz/main/template.Rmd"
 ```
 
 ```{r setup, include = FALSE}
@@ -38,7 +38,7 @@ options(
 )
 ```
 
-```{r echo=FALSE}
+```{r include = FALSE}
 # https://archive.ics.uci.edu/ml/datasets/Abalone
 
 url <- paste0(
@@ -52,32 +52,46 @@ abalone_raw <- read_csv(url, col_names = FALSE)
 Task 1
 
 * Where and when was this data collected: Tasmania December 1995  
-* How many observations and variables are there - 4177 observations, 8 variables  
+* How many observations and variables are there - 4177 observations, 9 variables  
 * What are the variables? Describe each in terms of its units of measurement and it’s data type (continuous, integer, or categorical/nominal).
 
 	Name		Data Type	Meas.	Description
 	----		---------	-----	-----------
-	Sex		nominal			M, F, and I (infant)
-	Length		continuous	mm	Longest shell measurement
-	Diameter	continuous	mm	perpendicular to length
-	Height		continuous	mm	with meat in shell
-	Whole weight	continuous	grams	whole abalone
+	Sex		  nominal			M, F, and I (infant)
+	Length	continuous	mm	Longest shell measurement
+	Diametercontinuous	mm	perpendicular to length
+	Height	continuous	mm	with meat in shell
+	Whole   weight	continuous	grams	whole abalone
 	Shucked weight	continuous	grams	weight of meat
 	Viscera weight	continuous	grams	gut weight (after bleeding)
-	Shell weight	continuous	grams	after being dried
+	Shell   weight	continuous	grams	after being dried
 	Rings		integer			+1.5 gives the age in years
 
 
-```{r echo=TRUE}
+```{r einclude = FALSE}
 colnames(abalone_raw)
 ```
 
+
 Task 2
 
-```{r}
+```{r include = FALSE}
 abalone_raw
 
-abalone_raw %>% mutate(sex = sex)
+abalone_raw %>% 
+  rename(sex = X1,
+         length = X2,
+         diameter = X3,
+         height = X4,
+         whole_weight = X5,
+  shucked_weight = X6,
+  viscera_weight = X7,
+	shell_weight = X8,
+	rings = X9) %>% 
+  mutate(sex = fct_recode(sex),
+         rings = as.numeric(factor(rings)))
+                       
+                  
 
 # abalone <-
 #   abalone_raw %>%
@@ -88,9 +102,9 @@ abalone_raw %>% mutate(sex = sex)
 Pivot your data into a long format and store this data set in abalone_long using pivot_longer().
 
 ```{r}
-abalone_long <-
-  abalone %>%
-  pivot_longer(NA) # pivot your data
+# abalone_long <-
+#   abalone %>%
+#   pivot_longer(NA) # pivot your data
 ```
 
 
