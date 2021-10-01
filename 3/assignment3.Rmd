@@ -1,0 +1,153 @@
+---
+title: "Assignment 3"
+subtitle: "STAE04/DABN19: Data Visualization"
+author: "Roshan Talimi"
+date: "`r Sys.Date()`"
+papersize: a4
+geometry: margin=4cm
+colorlinks: true
+output:
+  pdf_document:
+    number_sections: true
+---
+
+```{r include = FALSE}
+#https://raw.githubusercontent.com/stat-lu/dataviz/main/template.Rmd"
+```
+
+```{r setup, include = FALSE}
+# Setup options for R Markdown
+knitr::opts_chunk$set(
+  echo       = FALSE,    # Do not print code
+  warning    = FALSE,    # Suppress warnings
+  message    = FALSE,    # Suppress messages
+  fig.align  = "center", # Center figures
+  fig.width  = 2.7,      # Good standard figure width for single-panel figures
+  fig.height = 2.4       # Good standard figure height for single-panel figures
+)
+
+library(tidyverse)
+library(Ecdat)
+
+# Set a theme for ggplot2
+theme_set(theme_light(base_size = 15))
+
+# Set options
+options(
+  digits = 3, # limit the number of significant digits
+  width  = 63 # limit the width of code output
+)
+```
+
+Task 1: Getting a Feel for the Data
+
+the variables themselves (including units of measurement if they are not self-explanatory and transformations), and the source of the data set.
+
+
+
+The wages data set consists of 4165 observations and 12 variables.
+The source of the data set is a panel of 595 observations from 1976 to 1982 in United States.
+
+The variables are:
+
+* exp:        years of full-time work experience 
+* wks:        weeks worked
+* bluecol:    blue collar 
+* ind
+* south
+smsa
+married
+sex
+union
+ed
+black
+lwage
+
+
+```{r echo=FALSE}
+data("Wages")
+Wages %>% str()
+?Wages
+```
+
+
+```{r echo=TRUE}
+
+```
+
+
+Before you begin, add a new variable to the data set containing the wages at its original (non-transformed) scale using mutate(). Note that the lwage column in the data set represents wages logarithmized with the natural logarithm. Name the new variable wage.
+
+Hint: What is the inverse of the (natural) logarithm? e^x
+
+```{r echo=FALSE}
+Wages
+Wages <- Wages %>% mutate(wage = exp(lwage))
+```
+
+```{r, fig.cap = "Years of experience and wage"}
+Wages %>% ggplot(aes(exp, wage)) + geom_point()  #add jidder
+Wages %>% ggplot(aes(exp, lwage)) + geom_point() #add jidder
+Wages %>% ggplot(aes(wage, lwage)) + geom_point()
+```
+
+
+Task 2
+
+Task 2: Weeks Worked and Wages
+Let’s move on to take a look at wages and its relationship to the number of weeks worked in a year. 
+Instead of looking at the entire data set, however, we will only consider individuals working for 40 or more weeks. 
+Filter out the remaining observations and then construct your plot.
+
+Comment on the pattern in your plot—what shape is it? Speculate as to why the pattern looks the way it does.
+
+```{r echo=TRUE}
+Wages %>% filter(wks >= 40) %>% ggplot(aes(exp, wage)) + geom_point()
+Wages 
+```
+
+```{r echo=FALSE}
+knitr::kable(table4a_tidy)
+```
+
+
+Task 3
+
+```{r}
+Wages <-
+  Wages %>%
+  mutate(wage_levels = cut(
+    wage,
+    c(0, 750, 1500, max(wage)),
+    labels = c("Low", "Mid", "High")
+  ))
+```
+
+
+Now, your job is to construct a plot of the relationship between wage levels (wage_levels) and one of the following variables:
+
+whether the job is a blue-collar job or not,
+whether the job is in a manufacturing industry,
+whether the person resides in the south,
+whether the person is married,
+the sex of the individual,
+whether the wage is set by a union contract, and
+whether the individual is black or not.
+Explore the various relationships using different visualization techniques and choose one that you find to be particularly interesting to include in your final report.
+
+
+```{r echo=FALSE}
+Wages %>% filter(wks >= 40) %>% ggplot(aes(exp, wage, color = wage_levels)) + geom_point()
+```
+
+
+
+```{r echo=FALSE}
+
+```
+
+
+
+
+
+
