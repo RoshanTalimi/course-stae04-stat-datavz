@@ -41,11 +41,7 @@ options(
 
 Task 1: Getting a Feel for the Data
 
-the variables themselves (including units of measurement if they are not self-explanatory and transformations), and the source of the data set.
-
-
-
-The wages data set consists of 4165 observations and 12 variables.
+The wages data set consists of 4165 observations/individuals and 12 variables.
 The source of the data set is a panel of 595 observations from 1976 to 1982 in United States.
 
 The variables are:
@@ -53,21 +49,29 @@ The variables are:
 * exp:        years of full-time work experience 
 * wks:        weeks worked
 * bluecol:    blue collar 
-* ind
-* south
-smsa
-married
-sex
-union
-ed
-black
-lwage
+* ind:        works in a manufacturing industry
+* south:      resides in the south
+* smsa:       resides in a standard metropolitan statistical are
+* married:    married
+* sex:        a factor with levels (male,female)
+* union:      individual's wage set by a union contract
+* ed:         years of education
+* black:      is the individual black
+* lwage:      logarithm of wage ($)
+
+
+Source:
+Cornwell, C. and P. Rupert (1988) “Efficient estimation with panel data: an empirical comparison of instrumental variables estimators”, Journal of Applied Econometrics, 3, 149–155.
+
+Panel study of income dynamics.
+
+References:
+Baltagi, Badi H. (2003) Econometric analysis of panel data, John Wiley and sons, https://www.wiley.com/legacy/wileychi/baltagi/.
 
 
 ```{r echo=FALSE}
 data("Wages")
-Wages %>% str()
-?Wages
+Wages <- Wages %>% mutate(wage = exp(lwage))
 ```
 
 
@@ -82,7 +86,7 @@ Hint: What is the inverse of the (natural) logarithm? e^x
 
 ```{r echo=FALSE}
 Wages
-Wages <- Wages %>% mutate(wage = exp(lwage))
+
 ```
 
 ```{r, fig.cap = "Years of experience and wage"}
@@ -107,7 +111,7 @@ Wages
 ```
 
 ```{r echo=FALSE}
-knitr::kable(table4a_tidy)
+
 ```
 
 
