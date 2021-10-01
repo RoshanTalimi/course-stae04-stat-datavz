@@ -1,5 +1,5 @@
 ---
-title: "Assignment1"
+title: "Assignment 1"
 subtitle: "STAE04/DABN19: Data Visualization"
 author: "Roshan Talimi"
 date: "`r Sys.Date()`"
