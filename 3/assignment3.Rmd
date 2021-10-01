@@ -59,7 +59,6 @@ The variables are:
 * black:      is the individual black
 * lwage:      logarithm of wage ($)
 
-
 Source:
 Cornwell, C. and P. Rupert (1988) “Efficient estimation with panel data: an empirical comparison of instrumental variables estimators”, Journal of Applied Econometrics, 3, 149–155.
 
@@ -74,44 +73,45 @@ data("Wages")
 Wages <- Wages %>% mutate(wage = exp(lwage))
 ```
 
+I'll add a new variable called wage that is the exponent of lwage so the real wage.
+What is the inverse of the (natural) logarithm? e^ln(x) = x0
+
+Relationship between years of experience and wage can be seen below:
 
 ```{r echo=TRUE}
-
+Wages %>% ggplot(aes(exp, wage)) + geom_jitter() + geom_smooth(method = "lm")
+Wages %>% ggplot(aes(exp, lwage)) + geom_jitter() + geom_smooth(method = "lm")
 ```
 
-
-Before you begin, add a new variable to the data set containing the wages at its original (non-transformed) scale using mutate(). Note that the lwage column in the data set represents wages logarithmized with the natural logarithm. Name the new variable wage.
-
-Hint: What is the inverse of the (natural) logarithm? e^x
+The correlation between wage and years of experience is 0.2 so not a very significant correlation.
 
 ```{r echo=FALSE}
-Wages
-
+cor(Wages$exp, Wages$wage)
 ```
 
 ```{r, fig.cap = "Years of experience and wage"}
-Wages %>% ggplot(aes(exp, wage)) + geom_point()  #add jidder
-Wages %>% ggplot(aes(exp, lwage)) + geom_point() #add jidder
-Wages %>% ggplot(aes(wage, lwage)) + geom_point()
-```
-
-
-Task 2
-
-Task 2: Weeks Worked and Wages
-Let’s move on to take a look at wages and its relationship to the number of weeks worked in a year. 
-Instead of looking at the entire data set, however, we will only consider individuals working for 40 or more weeks. 
-Filter out the remaining observations and then construct your plot.
-
-Comment on the pattern in your plot—what shape is it? Speculate as to why the pattern looks the way it does.
-
-```{r echo=TRUE}
-Wages %>% filter(wks >= 40) %>% ggplot(aes(exp, wage)) + geom_point()
-Wages 
+Wages %>% ggplot(aes(exp, lwage)) + geom_jitter() + geom_smooth(method = "lm")
 ```
 
 ```{r echo=FALSE}
+cor(Wages$exp, Wages$lwage)
+```
 
+Task 2: Weeks Worked and Wages
+
+Let’s look at wages and its relationship to the number of weeks worked in a year. 
+Instead of looking at the entire data set, however, we will only consider individuals working for 40 or more weeks. 
+
+```{r echo=TRUE}
+Wages %>% filter(wks < 40)
+Wages %>% filter(wks >= 40) %>% ggplot(aes(exp, lwage)) + geom_jitter() + geom_smooth(method = "lm")
+```
+
+Comment on the pattern in your plot—what shape is it? Speculate as to why the pattern looks the way it does.
+
+```{r echo=FALSE}
+Wages %>% filter(wks >= 40) %>% select(exp, lwage) %>% cor()
+Wages %>% filter(wks >= 40) %>% select(exp, wage) %>% cor()
 ```
 
 
@@ -128,20 +128,11 @@ Wages <-
 ```
 
 
-Now, your job is to construct a plot of the relationship between wage levels (wage_levels) and one of the following variables:
-
-whether the job is a blue-collar job or not,
-whether the job is in a manufacturing industry,
-whether the person resides in the south,
-whether the person is married,
-the sex of the individual,
-whether the wage is set by a union contract, and
-whether the individual is black or not.
-Explore the various relationships using different visualization techniques and choose one that you find to be particularly interesting to include in your final report.
+The relationship between wage levels and he sex of the individua:
 
 
 ```{r echo=FALSE}
-Wages %>% filter(wks >= 40) %>% ggplot(aes(exp, wage, color = wage_levels)) + geom_point()
+Wages %>% ggplot(aes(exp, lwage, color = wage_levels)) + geom_point() + facet_wrap(~sex)
 ```
 
 
