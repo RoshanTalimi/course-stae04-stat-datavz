@@ -1,5 +1,5 @@
 ---
-title: "Assignment2"
+title: "Assignment 2"
 subtitle: "STAE04/DABN19: Data Visualization"
 author: "Roshan Talimi"
 date: "`r Sys.Date()`"
@@ -53,6 +53,7 @@ Abalone data set:
 ```{r include = FALSE}
 abalone_raw %>% sample_n(10) %>% knitr::kable("simple")
 ```
+
 
 Task 1
 
