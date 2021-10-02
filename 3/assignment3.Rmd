@@ -12,34 +12,13 @@ output:
 ---
 
 ```{r include = FALSE}
+library(tidyverse)
+library(Ecdat)
+theme_set(theme_light(base_size = 15))
 #https://raw.githubusercontent.com/stat-lu/dataviz/main/template.Rmd"
 ```
 
-```{r setup, include = FALSE}
-# Setup options for R Markdown
-knitr::opts_chunk$set(
-  echo       = FALSE,    # Do not print code
-  warning    = FALSE,    # Suppress warnings
-  message    = FALSE,    # Suppress messages
-  fig.align  = "center", # Center figures
-  fig.width  = 2.7,      # Good standard figure width for single-panel figures
-  fig.height = 2.4       # Good standard figure height for single-panel figures
-)
-
-library(tidyverse)
-library(Ecdat)
-
-# Set a theme for ggplot2
-theme_set(theme_light(base_size = 15))
-
-# Set options
-options(
-  digits = 3, # limit the number of significant digits
-  width  = 63 # limit the width of code output
-)
-```
-
-Task 1: Getting a Feel for the Data
+# Task 1: Getting a Feel for the Data
 
 The wages data set consists of 4165 observations/individuals and 12 variables.
 The source of the data set is a panel of 595 observations from 1976 to 1982 in United States.
@@ -59,65 +38,73 @@ The variables are:
 * black:      is the individual black
 * lwage:      logarithm of wage ($)
 
+
+
 Source:
 Cornwell, C. and P. Rupert (1988) “Efficient estimation with panel data: an empirical comparison of instrumental variables estimators”, Journal of Applied Econometrics, 3, 149–155.
 
 Panel study of income dynamics.
 
 References:
-Baltagi, Badi H. (2003) Econometric analysis of panel data, John Wiley and sons, https://www.wiley.com/legacy/wileychi/baltagi/.
+Baltagi, Badi H. (2003) Econometric analysis of panel data, John Wiley and sons, https://www.wiley.com/legacy/wileychi/baltagi
 
 
-```{r echo=FALSE}
+```{r echo=FALSE, include = FALSE}
 data("Wages")
 Wages <- Wages %>% mutate(wage = exp(lwage))
 ```
 
 I'll add a new variable called wage that is the exponent of lwage so the real wage.
-What is the inverse of the (natural) logarithm? e^ln(x) = x0
+What is the inverse of the (natural) logarithm? e^ln(x) = x
+
+
 
 Relationship between years of experience and wage can be seen below:
 
-```{r echo=TRUE}
-Wages %>% ggplot(aes(exp, wage)) + geom_jitter() + geom_smooth(method = "lm")
-Wages %>% ggplot(aes(exp, lwage)) + geom_jitter() + geom_smooth(method = "lm")
+```{r echo=FALSE, error=FALSE, message=FALSE}
+Wages %>% 
+  ggplot(aes(exp, wage)) + 
+  geom_jitter() + 
+  geom_smooth(method = "lm") + 
+  labs(title = "Wage vs years of experience",
+       x = "Years of full-time work experience ",
+       y = "Wage")
 ```
 
 The correlation between wage and years of experience is 0.2 so not a very significant correlation.
 
-```{r echo=FALSE}
+```{r echo=FALSE, include = FALSE}
 cor(Wages$exp, Wages$wage)
 ```
 
-```{r, fig.cap = "Years of experience and wage"}
-Wages %>% ggplot(aes(exp, lwage)) + geom_jitter() + geom_smooth(method = "lm")
-```
 
-```{r echo=FALSE}
-cor(Wages$exp, Wages$lwage)
-```
 
-Task 2: Weeks Worked and Wages
+
+
+# Task 2: Weeks Worked and Wages
 
 Let’s look at wages and its relationship to the number of weeks worked in a year. 
-Instead of looking at the entire data set, however, we will only consider individuals working for 40 or more weeks. 
+Instead of looking at the entire data set, we will only consider individuals working for 40 or more weeks. 
+They make up around 91% of the data. 
 
-```{r echo=TRUE}
-Wages %>% filter(wks < 40)
-Wages %>% filter(wks >= 40) %>% ggplot(aes(exp, lwage)) + geom_jitter() + geom_smooth(method = "lm")
+
+```{r echo=FALSE, error=FALSE, message=FALSE}
+Wages %>% 
+  filter(wks >= 40) %>% 
+  ggplot(aes(exp, lwage)) + 
+  geom_jitter() + 
+  geom_smooth(method = "lm") +
+  labs(title = "Wage vs years of experience for people with over 40 weeks worked",
+       x = "Weeks worked",
+       y = "Natural Logarith of Wage")
 ```
 
-Comment on the pattern in your plot—what shape is it? Speculate as to why the pattern looks the way it does.
+I don't see a lot of change for people working full time or less.
+The correlations doesn't change much for this group in particular.
 
-```{r echo=FALSE}
-Wages %>% filter(wks >= 40) %>% select(exp, lwage) %>% cor()
-Wages %>% filter(wks >= 40) %>% select(exp, wage) %>% cor()
-```
+# Task 3
 
-
-Task 3
-
-```{r}
+```{r echo=FALSE, include = FALSE}
 Wages <-
   Wages %>%
   mutate(wage_levels = cut(
@@ -128,20 +115,19 @@ Wages <-
 ```
 
 
-The relationship between wage levels and he sex of the individua:
+The relationship between wage levels and the sex of the individuals:
 
-
-```{r echo=FALSE}
-Wages %>% ggplot(aes(exp, lwage, color = wage_levels)) + geom_point() + facet_wrap(~sex)
+```{r echo=FALSE, error=FALSE, message=FALSE}
+Wages %>% 
+  ggplot(aes(exp, wage, color = wage_levels)) + 
+  geom_jitter() + 
+  facet_wrap(~sex, nrow = 2) + 
+  labs(title = "Wage vs years of experience for male and females",
+       x = "Years of full-time work experience ",
+       y = "Wage",
+       colour = "Gender")
 ```
-
-
-
-```{r echo=FALSE}
-
-```
-
-
+We see clearly that during 1976 to 1982 there is a distinction between males and females.
 
 
 
